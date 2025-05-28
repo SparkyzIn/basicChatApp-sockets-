@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat App Using Socket.io</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>chatApp (socket)</h1>
+
+  <div id="chat-container">
+    <div id="messages"></div>
+
+    <div id="input-area">
+      <input
+        type="text"
+        id="message"
+        placeholder="Enter Message"
+        autocomplete="off"
+        autofocus
+      />
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    const sendBtn = document.getElementById("sendBtn");
+    const messageInput = document.getElementById("message");
+    const allMessages = document.getElementById("messages");
+
+    function sendMessage() {
+      const message = messageInput.value.trim();
+      if (message.length === 0) return;
+      socket.emit("chat message", {
+        message,
+        senderId: socket.id,
+      });
+      messageInput.value = "";
+      messageInput.focus();
+    }
+
+    // Send message on button click
+    sendBtn.addEventListener("click", sendMessage);
+
+    // Send message on Enter key press
+    messageInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    // Receive messages
+    socket.on("chat message", (data) => {
+      const p = document.createElement("p");
+      p.textContent = data.message;
+
+      if (data.senderId === socket.id) {
+        p.classList.add("sender");
+      } else {
+        p.classList.add("receiver");
+      }
+
+      allMessages.appendChild(p);
+      allMessages.scrollTop = allMessages.scrollHeight; // Auto scroll down
+    });
+  </script>
+</body>
+</html>
