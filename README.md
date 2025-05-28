@@ -1,1 +1,1 @@
-# basicChatApp-sockets-
+This is a basic chat app designed for beginners who want to learn how a chat application works. To get started, first run npm install to install all the necessary dependencies. After that, run node index.js to start the project. Once the app is running, you can begin using the chat features. It’s a straightforward setup to help you quickly get the app up and running you can use it by opening the localhost in two different browsers.
